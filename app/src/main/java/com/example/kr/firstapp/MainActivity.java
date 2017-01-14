@@ -6,28 +6,29 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity{
 
-    Button bLogout;
-    EditText etName, etAge, etUsername;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        etName = (EditText) findViewById(R.id.etName);
-        etAge = (EditText) findViewById(R.id.etAge);
-        etUsername = (EditText) findViewById(R.id.etUsername);
-        bLogout = (Button) findViewById(R.id.bLogout);
-        bLogout.setOnClickListener(this);
-    }
 
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.bLogout:
-            startActivity(new Intent(this, Login.class));
-                break;
-        }
+        final EditText etUsername = (EditText) findViewById(R.id.etName);
+        final EditText etAge = (EditText) findViewById(R.id.etAge);
+        final TextView etWelcomeMsg = (TextView) findViewById(R.id.tvWelcomeMsg);
+
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("name");
+        String username = intent.getStringExtra("username");
+        int age = intent.getIntExtra("age", -1);
+
+        String message = name + "welcome to your profile";
+        etWelcomeMsg.setText(message);
+        etUsername.setText(username);
+        etAge.setText(age + "");
+
+
     }
 }
