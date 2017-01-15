@@ -15,37 +15,37 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Register extends AppCompatActivity{
+public class Register extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        final EditText etName = (EditText) findViewById(R.id.etName);
+
         final EditText etAge = (EditText) findViewById(R.id.etAge);
+        final EditText etName = (EditText) findViewById(R.id.etName);
         final EditText etUsername = (EditText) findViewById(R.id.etUsername);
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
         final Button bRegister = (Button) findViewById(R.id.bRegister);
 
-        bRegister.setOnClickListener(new  View.OnClickListener() {
+        bRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String name = etName.getText().toString();
                 final String username = etUsername.getText().toString();
-                final String password = etPassword.getText().toString();
                 final int age = Integer.parseInt(etAge.getText().toString());
+                final String password = etPassword.getText().toString();
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
-
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean success = jsonObject.getBoolean("success");
-                            if (success){
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+                            if (success) {
                                 Intent intent = new Intent(Register.this, Login.class);
                                 Register.this.startActivity(intent);
-                            }else{
+                            } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
                                 builder.setMessage("Register Failed")
                                         .setNegativeButton("Retry", null)
@@ -58,11 +58,10 @@ public class Register extends AppCompatActivity{
                     }
                 };
 
-                RegisterClass registerClass = new RegisterClass(name, username, age, password, responseListener);
+                RegisterClass registerRequest = new RegisterClass(name, username, age, password, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(Register.this);
-                queue.add(registerClass);
-
+                queue.add(registerRequest);
             }
-         });
+        });
     }
 }
