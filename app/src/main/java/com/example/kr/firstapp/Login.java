@@ -18,17 +18,18 @@ import org.json.JSONObject;
 
 
 public class Login extends AppCompatActivity{
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Fields on the page
         final EditText etUsername = (EditText) findViewById(R.id.etUsername);
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
         final Button bLogin = (Button) findViewById(R.id.bLogin);
         final TextView tvRegisterLink = (TextView) findViewById(R.id.tvRegisterLink);
 
+        // If the register link is clicked on create an intent of the Register screen
         tvRegisterLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -37,21 +38,24 @@ public class Login extends AppCompatActivity{
             }
         });
 
+        // Click the Login
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String username = etUsername.getText().toString();
                 final String password = etPassword.getText().toString();
 
+                // Listener will send the information
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            // Retrieve the JSON
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
 
                             if(success){
-
+                                // Set the JSON to fields in the user profile page
                                 String name = jsonResponse.getString("name");
                                 int age = jsonResponse.getInt("age");
                                 Intent intent = new Intent(new Intent(Login.this, MainActivity.class));

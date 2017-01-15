@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by KR on 1/12/2017.
- */
+ * This class retrieves the login data from the database and if found logs the user in.
+ **/
 
 public class LoginClass extends StringRequest {
     private static final String REGISTER_REQUEST_URL =

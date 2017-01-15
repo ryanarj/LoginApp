@@ -16,18 +16,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Register extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        // User input fields
         final EditText etAge = (EditText) findViewById(R.id.etAge);
         final EditText etName = (EditText) findViewById(R.id.etName);
         final EditText etUsername = (EditText) findViewById(R.id.etUsername);
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
         final Button bRegister = (Button) findViewById(R.id.bRegister);
 
+        // When the register button is clicked on
         bRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,12 +37,16 @@ public class Register extends AppCompatActivity {
                 final int age = Integer.parseInt(etAge.getText().toString());
                 final String password = etPassword.getText().toString();
 
+                // Have a string listener initiated
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        // try-catch the JSON object
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
+
+                            // The response goes well then create an intent that goes to the Login
                             if (success) {
                                 Intent intent = new Intent(Register.this, Login.class);
                                 Register.this.startActivity(intent);
@@ -58,6 +63,7 @@ public class Register extends AppCompatActivity {
                     }
                 };
 
+                // If all goes well then store the register info in the queue and then send it to the Database
                 RegisterClass registerRequest = new RegisterClass(name, username, age, password, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(Register.this);
                 queue.add(registerRequest);

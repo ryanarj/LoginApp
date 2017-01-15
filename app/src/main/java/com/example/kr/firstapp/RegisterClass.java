@@ -7,14 +7,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by KR on 1/12/2017.
- */
+ *  This class is the register of the connection between the Register fields and the Database
+ **/
 
 public class RegisterClass extends StringRequest {
+
+    // This is the URL of the database php file, which handles the transfer of data
     private static final String REGISTER_REQUEST_URL =
             "http://karshan.000webhostapp.com/Register.php";
     private Map<String, String> params;
 
+    // The fields are passed here and a hashmap is the dictionary of the objects
     public RegisterClass(String name, String username, int age, String password, Response.Listener<String> listener){
         super(Method.POST, REGISTER_REQUEST_URL, listener, null);
         params = new HashMap<>();
