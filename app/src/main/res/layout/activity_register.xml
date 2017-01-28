@@ -15,6 +15,7 @@
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_marginBottom="10dp"
+        android:inputType="text"
         android:layout_height="wrap_content" />
 
     <TextView

@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity{
         final EditText etAge = (EditText) findViewById(R.id.etAge);
         final TextView etWelcomeMsg = (TextView) findViewById(R.id.tvWelcomeMsg);
         final Button bLogout = (Button) findViewById(R.id.bLogout);
+        final Button bAddPicture = (Button) findViewById(R.id.bAddPicture);
 
         // If the logout button is clicked on create an intent of the login screen
         bLogout.setOnClickListener(new View.OnClickListener() {
@@ -28,6 +29,17 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Intent registerIntent = new Intent(MainActivity.this, Login.class);
                 MainActivity.this.startActivity(registerIntent);
+            }
+        });
+
+
+        // Add profile picture
+        bAddPicture.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent photoIntent = new Intent(MainActivity.this, PhotoActivity.class);
+                MainActivity.this.startActivity(photoIntent);
             }
         });
 

@@ -64,7 +64,7 @@ public class Register extends AppCompatActivity {
                 };
 
                 // If all goes well then store the register info in the queue and then send it to the Database
-                RegisterClass registerRequest = new RegisterClass(name, username, age, password, responseListener);
+                RegisterClass registerRequest = new RegisterClass(name, username, password, age, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(Register.this);
                 queue.add(registerRequest);
             }

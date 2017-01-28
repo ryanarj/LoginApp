@@ -34,8 +34,15 @@
         android:layout_height="wrap_content" />
 
     <Button
+        android:id="@+id/bAddPicture"
+        android:text="Add Picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
         android:id="@+id/bLogout"
         android:text="Logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
 </LinearLayout>

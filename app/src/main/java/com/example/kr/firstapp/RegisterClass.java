@@ -18,7 +18,7 @@ public class RegisterClass extends StringRequest {
     private Map<String, String> params;
 
     // The fields are passed here and a hashmap is the dictionary of the objects
-    public RegisterClass(String name, String username, int age, String password, Response.Listener<String> listener){
+    public RegisterClass(String name, String username, String password, int age, Response.Listener<String> listener){
         super(Method.POST, REGISTER_REQUEST_URL, listener, null);
         params = new HashMap<>();
         params.put("name", name);
