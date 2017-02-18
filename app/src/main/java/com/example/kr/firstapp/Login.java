@@ -1,33 +1,41 @@
 package com.example.kr.firstapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 public class Login extends AppCompatActivity{
+    private ProgressDialog progressDialog;
+    private FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         // Fields on the page
-        final EditText etUsername = (EditText) findViewById(R.id.etUsername);
+        final EditText etEmail = (EditText) findViewById(R.id.etEmail);
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
         final Button bLogin = (Button) findViewById(R.id.bLogin);
         final TextView tvRegisterLink = (TextView) findViewById(R.id.tvRegisterLink);
+        progressDialog = new ProgressDialog(this);
+        firebaseAuth = FirebaseAuth.getInstance();
 
         // If the register link is clicked on create an intent of the Register screen
         tvRegisterLink.setOnClickListener(new View.OnClickListener() {
@@ -42,45 +50,42 @@ public class Login extends AppCompatActivity{
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String username = etUsername.getText().toString();
+                Intent mainIntent = new Intent(Login.this, MainActivity.class);
+                final String email = etEmail.getText().toString();
                 final String password = etPassword.getText().toString();
 
                 // Listener will send the information
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            // Retrieve the JSON
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
+                loginUser(email, password);
+                Login.this.startActivity(mainIntent);
 
-                            if(success){
-                                // Set the JSON to fields in the user profile page
-                                String name = jsonResponse.getString("name");
-                                int age = jsonResponse.getInt("age");
-                                Intent intent = new Intent(new Intent(Login.this, MainActivity.class));
-                                intent.putExtra("name", name);
-                                intent.putExtra("username", username);
-                                intent.putExtra("age", age);
-                                Login.this.startActivity(intent);
-
-                            }else{
-                                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
-                                builder.setMessage("Login Failed")
-                                        .setNegativeButton("Retry", null)
-                                        .create()
-                                        .show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-
-                LoginClass loginClass = new LoginClass(username, password, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(Login.this);
-                queue.add(loginClass);
             }
         });
+    }
+
+    protected void loginUser(String email, String password){
+        if (TextUtils.isEmpty(email)){
+            // email is empty
+            Toast.makeText(this, "Please Enter an email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Please Enter a password", Toast.LENGTH_SHORT).show();
+            return;
+
+        }
+        progressDialog.setMessage("Logining now...");
+        progressDialog.show();
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(Login.this, "Welcome", Toast.LENGTH_SHORT).show();
+                            progressDialog.hide();
+                        }
+                    }
+                });
+
     }
 }
