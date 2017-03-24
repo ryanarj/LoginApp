@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:id="@+id/activity_main"
     android:layout_height="match_parent"
     android:padding="10dp"
     android:layout_width="match_parent">
@@ -41,6 +42,12 @@
     <Button
         android:id="@+id/bAddPicture"
         android:text="Add Picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/bChatroom"
+        android:text="Chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

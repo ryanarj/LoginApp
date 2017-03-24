@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -18,10 +17,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.Map;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        // List that contains users data
-
         // Set the fields and buttons
         etUsername = (EditText) findViewById(R.id.etUsername);
         etAge = (EditText) findViewById(R.id.etAge);
@@ -54,14 +47,14 @@ public class MainActivity extends AppCompatActivity {
         final Button bLogout = (Button) findViewById(R.id.bLogout);
         final Button bSave = (Button) findViewById(R.id.bSave);
         final Button bAddPicture = (Button) findViewById(R.id.bAddPicture);
+        final Button bChatroom = (Button) findViewById(R.id.bChatroom);
 
 
-        if (firebaseAuth.getCurrentUser().getUid().toString() == null){
+        if (user == null){
             finish();
             startActivity(new Intent(this, Login.class));
         }
-
-
+        // Get the database of the objects like name and age from current user
         database = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
         database.addChildEventListener(new ChildEventListener() {
             @Override
@@ -120,10 +113,10 @@ public class MainActivity extends AppCompatActivity {
         bLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                Intent registerIntent = new Intent(MainActivity.this, Login.class);
-                MainActivity.this.startActivity(registerIntent);
                 firebaseAuth.signOut();
+                finish();
+                Intent loginIntent = new Intent(MainActivity.this, Login.class);
+                MainActivity.this.startActivity(loginIntent);
             }
         });
 
@@ -137,12 +130,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Launch the chatroom page
+        bChatroom.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent chatroomIntent = new Intent(MainActivity.this, ChatroomActivity.class);
+                MainActivity.this.startActivity(chatroomIntent);
+            }
+        });
+
     }
 
     private void saveUserInformation() {
         String username = etUsername.getText().toString().trim();
         String age = etAge.getText().toString().trim();
 
+        // Save the information of the user
         UserInformationData userInformationData = new UserInformationData(username, age);
         database.setValue(userInformationData);
         Toast.makeText(this, "Profile is updated", Toast.LENGTH_LONG).show();
